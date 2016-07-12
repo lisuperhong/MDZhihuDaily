@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
+    android:layout_height="wrap_content"
     android:paddingLeft="16dp"
-    android:paddingRight="46dp">
+    android:paddingRight="46dp"
+    android:paddingTop="18dp"
+    android:paddingBottom="10dp">
 
     <ImageView
         android:id="@+id/left_img"
@@ -11,7 +13,8 @@
         android:layout_height="wrap_content"
         android:paddingRight="12dp"
         android:layout_centerVertical="true"
-        android:src="@mipmap/menu_home"/>
+        android:src="@mipmap/menu_home"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/menu_text"
@@ -19,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/left_img"
-        android:textColor="#B7B7B7"
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:text="首页"/>
 
