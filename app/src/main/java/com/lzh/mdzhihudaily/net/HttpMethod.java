@@ -1,0 +1,69 @@
+package com.lzh.mdzhihudaily.net;
+
+import com.lzh.mdzhihudaily.constant.APIConstant;
+
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+/**
+ * @author 李昭鸿
+ * @description
+ * @date Created on 2016/7/13 0013  22:45
+ * github: https://github.com/lisuperhong
+ */
+public class HttpMethod {
+
+    private static HttpMethod instance;
+    private Retrofit retrofit;
+    private static DailyAPI dailyAPI;
+
+    public static HttpMethod getInstance() {
+        if (instance == null) {
+            instance = new HttpMethod();
+        }
+        return instance;
+    }
+
+    private HttpMethod() {
+         retrofit = new Retrofit.Builder()
+                 .client(setOkHttpClient())
+                 .baseUrl(APIConstant.BASE_URL)
+                 .addConverterFactory(GsonConverterFactory.create())
+                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                 .build();
+    }
+
+    /**
+     * 根据自身需求定义OkHttpClient
+     * @author 李昭鸿
+     * @date Created on 2016/7/13 0013 23:07
+     */
+    private OkHttpClient setOkHttpClient() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .connectTimeout(20, TimeUnit.SECONDS)
+                .readTimeout(20, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
+                .build();
+        return okHttpClient;
+    }
+
+    /**
+     * 提供对外的网络访问接口
+     * @author 李昭鸿
+     * @date Created on 2016/7/13 0013 23:13
+     */
+    public DailyAPI dailyAPI() {
+        if (dailyAPI == null) {
+            dailyAPI = retrofit.create(DailyAPI.class);
+        }
+        return dailyAPI;
+    }
+}
