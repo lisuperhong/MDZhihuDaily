@@ -1,4 +1,4 @@
-package com.lzh.mdzhihudaily.ui.adapter;
+package com.lzh.mdzhihudaily.base;
 
 import android.content.Context;
 import android.view.LayoutInflater;

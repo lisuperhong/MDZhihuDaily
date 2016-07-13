@@ -1,4 +1,4 @@
-package com.lzh.mdzhihudaily.ui.activity;
+package com.lzh.mdzhihudaily.base;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -13,9 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.lzh.mdzhihudaily.R;
-import com.lzh.mdzhihudaily.ui.fragment.NavigationFragment;
-import com.lzh.mdzhihudaily.ui.fragment.NewsListFragment;
-import com.lzh.mdzhihudaily.ui.fragment.ThemeDailyFragment;
+import com.lzh.mdzhihudaily.module.newsList.NewsListFragment;
+import com.lzh.mdzhihudaily.module.themeDaily.ThemeDailyFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -108,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                     transaction.replace(R.id.content_container, themeDailyFragment, THEME_FRAGMENT);
                     break;
             }
+            invalidateOptionsMenu();
             transaction.commit();
             currentIndex = index;
             drawer.closeDrawer(Gravity.LEFT);
@@ -120,19 +120,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -142,6 +137,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        if (currentIndex.equals(NEWS_FRAGMENT)) {
+            menu.findItem(R.id.action_notification).setVisible(true);
+            menu.findItem(R.id.action_add).setVisible(false);
+            menu.findItem(R.id.action_dark_mode).setVisible(true);
+            menu.findItem(R.id.action_settings).setVisible(true);
+        } else {
+            menu.findItem(R.id.action_notification).setVisible(false);
+            menu.findItem(R.id.action_add).setVisible(true);
+            menu.findItem(R.id.action_dark_mode).setVisible(false);
+            menu.findItem(R.id.action_settings).setVisible(false);
+        }
         return super.onPrepareOptionsMenu(menu);
     }
 

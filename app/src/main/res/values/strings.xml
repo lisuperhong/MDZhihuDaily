@@ -8,6 +8,7 @@
     <string name="action_notification">消息通知</string>
     <string name="action_dark_mode">夜间模式</string>
     <string name="action_settings">设置选项</string>
+    <string name="action_add_theme">添加主题</string>
 
     <string-array name="navigation_menu">
         <item>首页</item>

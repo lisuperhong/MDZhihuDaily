@@ -1,4 +1,4 @@
-package com.lzh.mdzhihudaily.ui.fragment;
+package com.lzh.mdzhihudaily.base;
 
 
 import android.content.Context;
@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.lzh.mdzhihudaily.R;
-import com.lzh.mdzhihudaily.ui.adapter.NavigationMenuAdapter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
