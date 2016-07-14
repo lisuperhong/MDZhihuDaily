@@ -1,5 +1,7 @@
 package com.lzh.mdzhihudaily.module.newsList.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -15,9 +17,11 @@ public class News implements Serializable {
 
     private String date;
     private List<Story> stories;
+    @SerializedName("top_stories")
     private List<TopStory> topStories;
 
-    private static class Story {
+    public static class Story implements Serializable {
+        private static final long serialVersionUID = 5912170425503920137L;
         public List<String> images;
         private int type;
         public long id;
@@ -35,11 +39,23 @@ public class News implements Serializable {
         public String getTitle() {
             return title;
         }
+
+        @Override
+        public String toString() {
+            return "{" +
+                    "ga_prefix='" + ga_prefix + '\'' +
+                    ", images=" + images +
+                    ", type=" + type +
+                    ", id=" + id +
+                    ", title='" + title + '\'' +
+                    '}';
+        }
     }
 
-    private static class TopStory {
+    public static class TopStory implements Serializable {
+        private static final long serialVersionUID = 6351641634889292035L;
         public long id;
-        public String images;
+        public String image;
         public String title;
         private int type;
         public String ga_prefix;
@@ -48,12 +64,23 @@ public class News implements Serializable {
             return id;
         }
 
-        public String getImages() {
-            return images;
+        public String getImage() {
+            return image;
         }
 
         public String getTitle() {
             return title;
+        }
+
+        @Override
+        public String toString() {
+            return "{" +
+                    "ga_prefix='" + ga_prefix + '\'' +
+                    ", id=" + id +
+                    ", image='" + image + '\'' +
+                    ", title='" + title + '\'' +
+                    ", type=" + type +
+                    '}';
         }
     }
 
@@ -69,4 +96,12 @@ public class News implements Serializable {
         return topStories;
     }
 
+    @Override
+    public String toString() {
+        return "News{" +
+                "date='" + date + '\'' +
+                ", stories=" + stories +
+                ", topStories=" + topStories +
+                '}';
+    }
 }

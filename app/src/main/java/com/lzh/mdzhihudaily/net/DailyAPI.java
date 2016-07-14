@@ -3,6 +3,7 @@ package com.lzh.mdzhihudaily.net;
 import com.lzh.mdzhihudaily.base.StartImage;
 import com.lzh.mdzhihudaily.module.newsDetail.model.NewsDetail;
 import com.lzh.mdzhihudaily.module.newsList.model.News;
+import com.lzh.mdzhihudaily.module.themeDaily.model.ThemeNews;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -47,4 +48,12 @@ public interface DailyAPI {
      */
     @GET("news/{id}")
     Observable<NewsDetail> newsDetail(@Path("id") long id);
+
+    /**
+     * 根据主题id获得该主题日报列表
+     * @author 李昭鸿
+     * @date Created on 2016/7/14 0014 0:05
+     */
+    @GET("theme/{id}")
+    Observable<ThemeNews> themeNews(@Path("id") int id);
 }

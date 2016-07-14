@@ -3,12 +3,12 @@ package com.lzh.mdzhihudaily.base;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Gravity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,10 +16,17 @@ import com.lzh.mdzhihudaily.R;
 import com.lzh.mdzhihudaily.module.newsList.NewsListFragment;
 import com.lzh.mdzhihudaily.module.themeDaily.ThemeDailyFragment;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String NEWS_FRAGMENT = "news";
     private static final String THEME_FRAGMENT = "theme";
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.drawer_layout)
+    DrawerLayout drawer;
 
     private String currentIndex;
     private String themeDaily;
@@ -28,13 +35,11 @@ public class MainActivity extends AppCompatActivity {
     private NewsListFragment newsListFragment;
     private ThemeDailyFragment themeDailyFragment;
 
-    private Toolbar toolbar;
-    private DrawerLayout drawer;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

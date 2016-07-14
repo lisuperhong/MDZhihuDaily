@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">知乎日报</string>
+    <string name="app_name">知乎小报</string>
     <string name="title_activity_main">首页</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

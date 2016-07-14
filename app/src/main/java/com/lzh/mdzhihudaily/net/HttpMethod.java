@@ -18,15 +18,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class HttpMethod {
 
-    private static HttpMethod instance;
     private Retrofit retrofit;
-    private static DailyAPI dailyAPI;
+    private DailyAPI dailyAPI;
+
+    private static class SingletonHolder {
+        private static final HttpMethod instance = new HttpMethod();
+    }
 
     public static HttpMethod getInstance() {
-        if (instance == null) {
-            instance = new HttpMethod();
-        }
-        return instance;
+        return SingletonHolder.instance;
     }
 
     private HttpMethod() {
@@ -36,6 +36,7 @@ public class HttpMethod {
                  .addConverterFactory(GsonConverterFactory.create())
                  .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                  .build();
+
     }
 
     /**
