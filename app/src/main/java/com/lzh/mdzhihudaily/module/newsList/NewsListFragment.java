@@ -29,6 +29,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observer;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
@@ -78,15 +79,15 @@ public class NewsListFragment extends BaseFragment implements SwipeRefreshLayout
         subscription = HttpMethod.getInstance().dailyAPI()
                 .newsLatest()
                 .subscribeOn(Schedulers.io())
-                .doOnSubscribe(new Action0() {
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<News>() {
+
                     @Override
-                    public void call() {
+                    public void onStart() {
+                        Logger.d("测试在哪个线程");
                         progressBar.setVisibility(View.VISIBLE);
                     }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<News>() {
+
                     @Override
                     public void onCompleted() {
                         progressBar.setVisibility(View.GONE);
