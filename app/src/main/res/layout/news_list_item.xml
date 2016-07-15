@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    android:layout_marginTop="8dp"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="3dp"
@@ -20,8 +19,8 @@
 
         <ImageView
             android:id="@+id/news_image"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="85dp"
+            android:layout_height="75dp"
             android:layout_alignParentRight="true"
             tools:src="@mipmap/ic_launcher" />
 
