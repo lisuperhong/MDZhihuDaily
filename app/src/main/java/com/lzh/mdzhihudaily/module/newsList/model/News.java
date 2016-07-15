@@ -27,6 +27,7 @@ public class News implements Serializable {
         public long id;
         public String ga_prefix;
         public String title;
+        public String topDate;
 
         public long getId() {
             return id;
@@ -38,6 +39,15 @@ public class News implements Serializable {
 
         public String getTitle() {
             return title;
+        }
+
+
+        public String getTopDate() {
+            return topDate;
+        }
+
+        public void setTopDate(String topDate) {
+            this.topDate = topDate;
         }
 
         @Override
