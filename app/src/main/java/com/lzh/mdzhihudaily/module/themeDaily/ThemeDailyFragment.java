@@ -24,15 +24,18 @@ import butterknife.ButterKnife;
 public class ThemeDailyFragment extends Fragment {
 
     public static final String KEY_THEME = "key_theme";
+    public static final String THEME_ID = "theme_id";
+
     private String theme;
 
     @Bind(R.id.text)
     TextView text;
 
-    public static ThemeDailyFragment newInstance(String theme) {
+    public static ThemeDailyFragment newInstance(String theme, long id) {
         ThemeDailyFragment themeDailyFragment = new ThemeDailyFragment();
         Bundle bundle = new Bundle();
         bundle.putString(KEY_THEME, theme);
+        bundle.putLong(THEME_ID, id);
         themeDailyFragment.setArguments(bundle);
         return themeDailyFragment;
     }

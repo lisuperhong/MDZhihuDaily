@@ -15,9 +15,12 @@ import android.view.MenuItem;
 import com.lzh.mdzhihudaily.R;
 import com.lzh.mdzhihudaily.module.newsList.NewsListFragment;
 import com.lzh.mdzhihudaily.module.themeDaily.ThemeDailyFragment;
+import com.lzh.mdzhihudaily.module.themeDaily.model.Theme;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observer;
+import rx.functions.Func0;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawer;
 
     private String currentIndex;
-    private String themeDaily;
+    private Theme theme;
     private FragmentManager fragmentManager;
     private NavigationFragment navigationFragment;
     private NewsListFragment newsListFragment;
@@ -68,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
     private void setListener() {
         navigationFragment.setOnMenuItemSelectedListener(new NavigationFragment.OnMenuItemSelectedListener() {
             @Override
-            public void menuItemSelected(int position, String theme) {
-                themeDaily = theme;
+            public void menuItemSelected(int position, Theme themeItem) {
+                theme = themeItem;
                 if (position == 0) {
                     setCurrentFramgent(NEWS_FRAGMENT);
                 } else {
@@ -102,13 +105,13 @@ public class MainActivity extends AppCompatActivity {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             switch (index) {
                 case NEWS_FRAGMENT:
-                    toolbar.setTitle(themeDaily);
+                    toolbar.setTitle(theme.getName());
                     newsListFragment = new NewsListFragment();
                     transaction.replace(R.id.content_container, newsListFragment, NEWS_FRAGMENT);
                     break;
                 case THEME_FRAGMENT:
-                    toolbar.setTitle(themeDaily);
-                    themeDailyFragment = new ThemeDailyFragment().newInstance(themeDaily);
+                    toolbar.setTitle(theme.getName());
+                    themeDailyFragment = new ThemeDailyFragment().newInstance(theme.getName(), theme.getId());
                     transaction.replace(R.id.content_container, themeDailyFragment, THEME_FRAGMENT);
                     break;
             }
@@ -156,4 +159,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
+    public Toolbar getToolbar() {
+        return toolbar;
+    }
 }

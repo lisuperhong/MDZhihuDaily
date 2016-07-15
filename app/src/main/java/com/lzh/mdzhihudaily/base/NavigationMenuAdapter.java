@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lzh.mdzhihudaily.R;
+import com.lzh.mdzhihudaily.module.themeDaily.model.Theme;
+
+import java.util.List;
 
 /**
  * @author 李昭鸿
@@ -19,24 +22,22 @@ import com.lzh.mdzhihudaily.R;
 public class NavigationMenuAdapter extends BaseAdapter {
 
     private Context context;
-    private LayoutInflater inflater;
-    private String[] menuArray;
+    private List<Theme> themes;
     private int selectedMenu;
 
-    public NavigationMenuAdapter(Context context) {
+    public NavigationMenuAdapter(Context context, List<Theme> themes) {
         this.context = context;
-        inflater = LayoutInflater.from(context);
-        menuArray = context.getResources().getStringArray(R.array.navigation_menu);
+        this.themes = themes;
     }
 
     @Override
     public int getCount() {
-        return menuArray.length;
+        return themes == null ? 0 : themes.size();
     }
 
     @Override
-    public String getItem(int position) {
-        return menuArray[position];
+    public Theme getItem(int position) {
+        return themes.get(position);
     }
 
     @Override
@@ -48,7 +49,7 @@ public class NavigationMenuAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         MenuViewHolder viewHolder;
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.navigation_menu_item, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.navigation_menu_item, null);
             viewHolder = new MenuViewHolder();
             viewHolder.leftImg = (ImageView) convertView.findViewById(R.id.left_img);
             viewHolder.menuText = (TextView) convertView.findViewById(R.id.menu_text);
@@ -72,7 +73,7 @@ public class NavigationMenuAdapter extends BaseAdapter {
             convertView.setBackgroundColor(context.getResources().getColor(R.color.white));
         }
 
-        viewHolder.menuText.setText(menuArray[position]);
+        viewHolder.menuText.setText(themes.get(position).getName());
         return convertView;
     }
 

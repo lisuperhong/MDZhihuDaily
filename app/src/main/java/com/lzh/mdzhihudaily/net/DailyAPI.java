@@ -8,6 +8,7 @@ import com.lzh.mdzhihudaily.module.themeDaily.model.ThemeNews;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import rx.Observable;
+import rx.Observer;
 
 /**
  * @author 李昭鸿
@@ -48,6 +49,9 @@ public interface DailyAPI {
      */
     @GET("news/{id}")
     Observable<NewsDetail> newsDetail(@Path("id") long id);
+
+    @GET("themes")
+    Observable<String> themes();
 
     /**
      * 根据主题id获得该主题日报列表

@@ -13,10 +13,24 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.lzh.mdzhihudaily.R;
+import com.lzh.mdzhihudaily.module.themeDaily.model.Theme;
+import com.lzh.mdzhihudaily.net.HttpMethod;
+import com.orhanobut.logger.Logger;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * @author 李昭鸿
@@ -24,7 +38,7 @@ import butterknife.OnClick;
  * @date Created on 2016/7/9 0009 23:17
  * github: https://github.com/lisuperhong
  */
-public class NavigationFragment extends Fragment {
+public class NavigationFragment extends BaseFragment {
 
     @Bind(R.id.imageView)
     ImageView userHead;
@@ -45,9 +59,48 @@ public class NavigationFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         context = getActivity();
-        adapter = new NavigationMenuAdapter(context);
-        navMenuList.setAdapter(adapter);
+        initListener();
+        initData();
+    }
+
+    private void initData() {
+        unsubscribe();
+        subscription = HttpMethod.getInstance().dailyAPI()
+                .themes()
+                .map(new Func1<String, List<Theme>>() {
+                    @Override
+                    public List<Theme> call(String s) {
+                        List<Theme> themes = new ArrayList<>();
+                        try {
+                            JSONArray jsonArray = new JSONObject(s).getJSONArray("others");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                Theme theme = new Theme();
+                                JSONObject json = jsonArray.getJSONObject(i);
+                                theme.setDescription(json.getString("description"));
+                                theme.setId(json.getLong("id"));
+                                theme.setName(json.getString("name"));
+                                themes.add(theme);
+                            }
+                        } catch (JSONException e) {
+                            Logger.e(e, "Json异常");
+                        }
+                        return themes;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<Theme>>() {
+                    @Override
+                    public void call(List<Theme> themes) {
+                        adapter = new NavigationMenuAdapter(context, themes);
+                        navMenuList.setAdapter(adapter);
+                    }
+                });
+    }
+
+    private void initListener() {
         navMenuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -65,14 +118,9 @@ public class NavigationFragment extends Fragment {
         ButterKnife.unbind(this);
     }
 
-    @OnClick(R.id.imageView)
-    public void onClick() {
-
-    }
-
     //选择回调的接口
     public interface OnMenuItemSelectedListener {
-        void menuItemSelected(int position, String theme);
+        void menuItemSelected(int position, Theme theme);
     }
     private OnMenuItemSelectedListener menuItemSelectedListener;
 
