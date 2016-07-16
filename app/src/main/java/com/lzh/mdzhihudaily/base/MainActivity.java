@@ -70,10 +70,10 @@ public class MainActivity extends AppCompatActivity {
         navigationFragment.setOnMenuItemSelectedListener(new NavigationFragment.OnMenuItemSelectedListener() {
             @Override
             public void menuItemSelected(int position, ThemeEntity.Theme themeItem) {
-                theme = themeItem;
                 if (position == 0) {
                     setCurrentFramgent(NEWS_FRAGMENT);
                 } else {
+                    theme = themeItem;
                     setCurrentFramgent(THEME_FRAGMENT);
                 }
             }

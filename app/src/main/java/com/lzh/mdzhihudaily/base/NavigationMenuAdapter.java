@@ -32,12 +32,12 @@ public class NavigationMenuAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return themes == null ? 0 : themes.size();
+        return themes == null ? 1 : themes.size() + 1;
     }
 
     @Override
-    public ThemeEntity.Theme getItem(int position) {
-        return themes.get(position);
+    public Object getItem(int position) {
+        return null;
     }
 
     @Override
@@ -76,7 +76,7 @@ public class NavigationMenuAdapter extends BaseAdapter {
         if (position == 0) {
             viewHolder.menuText.setText("首页");
         } else {
-            viewHolder.menuText.setText(themes.get(position).getName());
+            viewHolder.menuText.setText(themes.get(position - 1).getName());
         }
         return convertView;
     }
@@ -84,6 +84,10 @@ public class NavigationMenuAdapter extends BaseAdapter {
     public void setSelectedMenu(int selectedMenu) {
         this.selectedMenu = selectedMenu;
         notifyDataSetChanged();
+    }
+
+    public List<ThemeEntity.Theme> getThemes() {
+        return themes;
     }
 
     private static class MenuViewHolder {

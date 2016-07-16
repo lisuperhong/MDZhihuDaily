@@ -94,7 +94,11 @@ public class NavigationFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (menuItemSelectedListener != null) {
-                    menuItemSelectedListener.menuItemSelected(position, adapter.getItem(position));
+                    if (position == 0) {
+                        menuItemSelectedListener.menuItemSelected(position, adapter.getThemes().get(0));
+                    } else {
+                        menuItemSelectedListener.menuItemSelected(position, adapter.getThemes().get(position - 1));
+                    }
                 }
                 adapter.setSelectedMenu(position);
             }

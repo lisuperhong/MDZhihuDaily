@@ -96,6 +96,11 @@ public class ThemeDailyListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
+    public void setThemeNews(ThemeNews themeNews) {
+        this.themeNews = themeNews;
+        notifyDataSetChanged();
+    }
+
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.news_image)

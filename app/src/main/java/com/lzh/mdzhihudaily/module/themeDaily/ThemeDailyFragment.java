@@ -4,16 +4,13 @@ package com.lzh.mdzhihudaily.module.themeDaily;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.lzh.mdzhihudaily.R;
 import com.lzh.mdzhihudaily.base.BaseFragment;
@@ -23,6 +20,7 @@ import com.lzh.mdzhihudaily.net.HttpMethod;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -90,6 +88,12 @@ public class ThemeDailyFragment extends BaseFragment implements SwipeRefreshLayo
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ThemeNews>() {
+
+                    @Override
+                    public void onStart() {
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
+
                     @Override
                     public void onCompleted() {
                         progressBar.setVisibility(View.GONE);
@@ -110,7 +114,28 @@ public class ThemeDailyFragment extends BaseFragment implements SwipeRefreshLayo
 
     @Override
     public void onRefresh() {
+        unsubscribe();
+        subscription = HttpMethod.getInstance().dailyAPI()
+                .themeNews(themeId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ThemeNews>() {
+                    @Override
+                    public void onCompleted() {
+                        refreshLayout.setRefreshing(false);
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        refreshLayout.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onNext(ThemeNews themeNews) {
+                        refreshLayout.setRefreshing(false);
+                        adapter.setThemeNews(themeNews);
+                    }
+                });
     }
 
     @Override
