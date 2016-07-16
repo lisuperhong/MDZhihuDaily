@@ -12,12 +12,9 @@ import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.lzh.mdzhihudaily.R;
-import com.lzh.mdzhihudaily.utils.DateUtil;
 import com.lzh.mdzhihudaily.view.CustomTextSliderView;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -38,17 +35,11 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context context;
     private List<News.Story> stories;
     private List<News.TopStory> topStories;
-    private String currentDate;
-    private String beforeNewsDate;
-    private List<Integer> datePositions;
 
     public NewsListAdapter(Context context, List<News.Story> stories, List<News.TopStory> topStories) {
         this.context = context;
         this.stories = stories;
         this.topStories = topStories;
-        currentDate = DateUtil.dateToString("yyyyMMdd", DateUtil.getCurrentDate());
-        beforeNewsDate = currentDate;
-        datePositions = new ArrayList<>();
     }
 
     @Override
@@ -58,7 +49,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             contentView = LayoutInflater.from(context).inflate(R.layout.news_list_item_header, parent, false);
             return new HeaderViewHolder(contentView);
         } else if (viewType == TYPE_WITH_DATE) {
-            contentView = LayoutInflater.from(context).inflate(R.layout.news_list_item_date, parent, false);
+            contentView = LayoutInflater.from(context).inflate(R.layout.news_list_item_with_date, parent, false);
             return new DateViewHolder(contentView);
         } else if (viewType == TYPE_ITEM) {
             contentView = LayoutInflater.from(context).inflate(R.layout.news_list_item, parent, false);
@@ -82,20 +73,10 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolder.sliderLayout.addSlider(textSliderView);
             }
         } else if (holder instanceof DateViewHolder) {
-            currentDate = beforeNewsDate;
             DateViewHolder viewHolder = (DateViewHolder) holder;
             bindItemView(viewHolder, position);
             News.Story story = stories.get(position - (topStories == null || topStories.isEmpty() ? 0 : 1));
-            if (position == 1) {
-                viewHolder.newsDate.setText("今日热闻");
-                story.setTopDate("今日热闻");
-            } else {
-                Date date = DateUtil.stringToDate("yyyyMMdd", beforeNewsDate);
-                String dateString = DateUtil.dateToString("M月d日", date) + " " + DateUtil.getDateWeek(date);
-                viewHolder.newsDate.setText(dateString);
-                story.setTopDate(dateString);
-            }
-            datePositions.add(position);
+            viewHolder.newsDate.setText(story.getStoryDate());
         } else if (holder instanceof ItemViewHolder) {
             ItemViewHolder viewHolder = (ItemViewHolder) holder;
             bindItemView(viewHolder, position);
@@ -123,31 +104,26 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else if (position == 1) {
             return TYPE_WITH_DATE;
         }
-        return currentDate.equals(beforeNewsDate) ? TYPE_ITEM : TYPE_WITH_DATE;
+
+        boolean isDateDiff = stories.get(position - 1).getStoryDate().equals(stories.get(position - 2).getStoryDate());
+        return isDateDiff ? TYPE_ITEM : TYPE_WITH_DATE;
     }
 
     public void setRefreshDate(List<News.Story> stories, List<News.TopStory> topStories) {
         this.stories = stories;
         this.topStories = topStories;
-        currentDate = DateUtil.dateToString("yyyyMMdd", DateUtil.getCurrentDate());
-        beforeNewsDate = currentDate;
         notifyDataSetChanged();
     }
 
-    public void setBeforeNews(String date, List<News.Story> beforeStories) {
+    public void setBeforeNews(List<News.Story> beforeStories) {
         for (News.Story story : beforeStories) {
             stories.add(story);
         }
-        this.beforeNewsDate = date;
         notifyDataSetChanged();
     }
 
     public List<News.Story> getStories() {
         return stories;
-    }
-
-    public List<Integer> getDatePositions() {
-        return datePositions;
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {

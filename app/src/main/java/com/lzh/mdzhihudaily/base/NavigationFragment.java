@@ -4,7 +4,6 @@ package com.lzh.mdzhihudaily.base;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.lzh.mdzhihudaily.R;
-import com.lzh.mdzhihudaily.module.themeDaily.model.Theme;
+import com.lzh.mdzhihudaily.constant.APIConstant;
+import com.lzh.mdzhihudaily.module.themeDaily.model.ThemeEntity;
+import com.lzh.mdzhihudaily.net.DailyAPI;
 import com.lzh.mdzhihudaily.net.HttpMethod;
 import com.orhanobut.logger.Logger;
 
@@ -26,7 +27,8 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -69,31 +71,18 @@ public class NavigationFragment extends BaseFragment {
         unsubscribe();
         subscription = HttpMethod.getInstance().dailyAPI()
                 .themes()
-                .map(new Func1<String, List<Theme>>() {
+                .map(new Func1<ThemeEntity, List<ThemeEntity.Theme>>() {
                     @Override
-                    public List<Theme> call(String s) {
-                        List<Theme> themes = new ArrayList<>();
-                        try {
-                            JSONArray jsonArray = new JSONObject(s).getJSONArray("others");
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                Theme theme = new Theme();
-                                JSONObject json = jsonArray.getJSONObject(i);
-                                theme.setDescription(json.getString("description"));
-                                theme.setId(json.getLong("id"));
-                                theme.setName(json.getString("name"));
-                                themes.add(theme);
-                            }
-                        } catch (JSONException e) {
-                            Logger.e(e, "Json异常");
-                        }
+                    public List<ThemeEntity.Theme> call(ThemeEntity themeEntity) {
+                        List<ThemeEntity.Theme> themes = themeEntity.getThemes();
                         return themes;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Theme>>() {
+                .subscribe(new Action1<List<ThemeEntity.Theme>>() {
                     @Override
-                    public void call(List<Theme> themes) {
+                    public void call(List<ThemeEntity.Theme> themes) {
                         adapter = new NavigationMenuAdapter(context, themes);
                         navMenuList.setAdapter(adapter);
                     }
@@ -120,7 +109,7 @@ public class NavigationFragment extends BaseFragment {
 
     //选择回调的接口
     public interface OnMenuItemSelectedListener {
-        void menuItemSelected(int position, Theme theme);
+        void menuItemSelected(int position, ThemeEntity.Theme theme);
     }
     private OnMenuItemSelectedListener menuItemSelectedListener;
 

@@ -8,8 +8,10 @@
         android:id="@+id/news_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:textColor="@color/black"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
+        android:textColor="#6F6F6F"
         android:textSize="16sp"
         android:text="今日热文"/>
 

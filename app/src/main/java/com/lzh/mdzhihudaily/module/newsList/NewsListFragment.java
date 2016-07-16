@@ -4,7 +4,6 @@ package com.lzh.mdzhihudaily.module.newsList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,8 +30,7 @@ import butterknife.ButterKnife;
 import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -45,7 +43,6 @@ import rx.schedulers.Schedulers;
  */
 public class NewsListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
-
     @Bind(R.id.recyclerview)
     RecyclerView recyclerview;
     @Bind(R.id.refresh_layout)
@@ -54,6 +51,7 @@ public class NewsListFragment extends BaseFragment implements SwipeRefreshLayout
     ProgressBar progressBar;
 
     private NewsListAdapter adapter;
+    private String currentDate;
     private String beforeDate;
     private boolean isLoadMore = false;
 
@@ -74,19 +72,16 @@ public class NewsListFragment extends BaseFragment implements SwipeRefreshLayout
     }
 
     private void initData() {
-        beforeDate = DateUtil.getPreviousDate("yyyyMMdd", DateUtil.dateToString("yyyyMMdd", DateUtil.getCurrentDate()));
+        currentDate = DateUtil.dateToString(DateUtil.FORMAT_YMD, DateUtil.getCurrentDate());
+        beforeDate = currentDate;
+        Logger.d("initdata " + beforeDate);
         unsubscribe();
         subscription = HttpMethod.getInstance().dailyAPI()
                 .newsLatest()
+                .map(getNewStories)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<News>() {
-
-                    @Override
-                    public void onStart() {
-                        Logger.d("测试在哪个线程");
-                        progressBar.setVisibility(View.VISIBLE);
-                    }
 
                     @Override
                     public void onCompleted() {
@@ -129,13 +124,15 @@ public class NewsListFragment extends BaseFragment implements SwipeRefreshLayout
         unsubscribe();
         subscription = HttpMethod.getInstance().dailyAPI()
                 .newsLatest()
+                .map(getNewStories)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<News>() {
                     @Override
                     public void onCompleted() {
                         refreshLayout.setRefreshing(false);
-                        beforeDate = DateUtil.getPreviousDate("yyyyMMdd", DateUtil.dateToString("yyyyMMdd", DateUtil.getCurrentDate()));
+                        beforeDate =  currentDate;
+                        Logger.d("refresh " + beforeDate);
                     }
 
                     @Override
@@ -153,8 +150,10 @@ public class NewsListFragment extends BaseFragment implements SwipeRefreshLayout
 
     private void loadMore() {
         unsubscribe();
+        Logger.d("loadMore " + beforeDate);
         subscription = HttpMethod.getInstance().dailyAPI()
                 .newBefore(beforeDate)
+                .map(getNewStories)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<News>() {
@@ -171,8 +170,8 @@ public class NewsListFragment extends BaseFragment implements SwipeRefreshLayout
 
                     @Override
                     public void onNext(News news) {
-                        beforeDate = DateUtil.getPreviousDate("yyyyMMdd", news.getDate());
-                        adapter.setBeforeNews(news.getDate(), news.getStories());
+                        beforeDate = news.getDate();
+                        adapter.setBeforeNews(news.getStories());
                     }
                 });
 
@@ -180,21 +179,24 @@ public class NewsListFragment extends BaseFragment implements SwipeRefreshLayout
 
     private class ListScrollListener extends RecyclerView.OnScrollListener {
 
-        boolean isSlidingToBottom = false;
+        String toolbarTitle = "";
 
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
             int firstVisibilityItem = manager.findFirstVisibleItemPosition();
-            int lastVisibilityItem = manager.findLastCompletelyVisibleItemPosition();
+            int lastVisibilityItem = manager.findLastVisibleItemPosition();
             int totalItemCount = manager.getItemCount();
 
-
-            if (adapter.getDatePositions().contains(firstVisibilityItem)) {
-                ((MainActivity) getActivity()).getToolbar().setTitle(adapter.getStories().get(firstVisibilityItem - 1).getTopDate());
+            if (firstVisibilityItem == 0) {
+                toolbarTitle = "首页";
+                ((MainActivity) getActivity()).getToolbar().setTitle(toolbarTitle);
+            } else if (!toolbarTitle.equals(adapter.getStories().get(firstVisibilityItem - 1))) {
+                toolbarTitle = adapter.getStories().get(firstVisibilityItem - 1).getStoryDate();
+                ((MainActivity) getActivity()).getToolbar().setTitle(toolbarTitle);
             }
 
-            if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibilityItem == (totalItemCount - 1) && isSlidingToBottom) {
+            if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibilityItem == (totalItemCount - 1)) {
                 isLoadMore = true;
                 loadMore();
             }
@@ -203,13 +205,30 @@ public class NewsListFragment extends BaseFragment implements SwipeRefreshLayout
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            if (dx > 0) {
-                isSlidingToBottom = true;
-            } else {
-                isSlidingToBottom = false;
-            }
         }
     }
+
+    private Func1<News, News> getNewStories = new Func1<News, News>() {
+        @Override
+        public News call(News news) {
+            Logger.d(news);
+            List<News.Story> newStories = new ArrayList<>();
+            String dateString = news.getDate();
+            if (dateString.equals(currentDate)) {
+                for (News.Story story : news.getStories()) {
+                    story.setStoryDate("今日热闻");
+                    newStories.add(story);
+                }
+            } else {
+                for (News.Story story : news.getStories()) {
+                    story.setStoryDate(DateUtil.getStringDate(DateUtil.FORMAT_MM_DD, dateString) + " " + DateUtil.getDateWeek(dateString));
+                    newStories.add(story);
+                }
+            }
+            news.setStories(newStories);
+            return news;
+        }
+    };
 
     @Override
     public void onDestroyView() {

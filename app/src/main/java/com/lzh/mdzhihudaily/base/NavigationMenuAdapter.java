@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lzh.mdzhihudaily.R;
-import com.lzh.mdzhihudaily.module.themeDaily.model.Theme;
+import com.lzh.mdzhihudaily.module.themeDaily.model.ThemeEntity;
 
 import java.util.List;
 
@@ -22,10 +22,10 @@ import java.util.List;
 public class NavigationMenuAdapter extends BaseAdapter {
 
     private Context context;
-    private List<Theme> themes;
+    private List<ThemeEntity.Theme> themes;
     private int selectedMenu;
 
-    public NavigationMenuAdapter(Context context, List<Theme> themes) {
+    public NavigationMenuAdapter(Context context, List<ThemeEntity.Theme> themes) {
         this.context = context;
         this.themes = themes;
     }
@@ -36,7 +36,7 @@ public class NavigationMenuAdapter extends BaseAdapter {
     }
 
     @Override
-    public Theme getItem(int position) {
+    public ThemeEntity.Theme getItem(int position) {
         return themes.get(position);
     }
 
@@ -73,7 +73,11 @@ public class NavigationMenuAdapter extends BaseAdapter {
             convertView.setBackgroundColor(context.getResources().getColor(R.color.white));
         }
 
-        viewHolder.menuText.setText(themes.get(position).getName());
+        if (position == 0) {
+            viewHolder.menuText.setText("首页");
+        } else {
+            viewHolder.menuText.setText(themes.get(position).getName());
+        }
         return convertView;
     }
 

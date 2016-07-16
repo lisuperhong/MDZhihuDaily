@@ -3,6 +3,7 @@ package com.lzh.mdzhihudaily.net;
 import com.lzh.mdzhihudaily.base.StartImage;
 import com.lzh.mdzhihudaily.module.newsDetail.model.NewsDetail;
 import com.lzh.mdzhihudaily.module.newsList.model.News;
+import com.lzh.mdzhihudaily.module.themeDaily.model.ThemeEntity;
 import com.lzh.mdzhihudaily.module.themeDaily.model.ThemeNews;
 
 import retrofit2.http.GET;
@@ -39,8 +40,8 @@ public interface DailyAPI {
      * @author 李昭鸿
      * @date Created on 2016/7/13 0013 22:43
      */
-    @GET("news/before/{date}")
-    Observable<News> newBefore(@Path("date") String date);
+    @GET("news/before/{storyDate}")
+    Observable<News> newBefore(@Path("storyDate") String date);
 
     /**
      * 获取消息详情
@@ -50,8 +51,13 @@ public interface DailyAPI {
     @GET("news/{id}")
     Observable<NewsDetail> newsDetail(@Path("id") long id);
 
+    /**
+     * 获取日报主题信息
+     * @author 李昭鸿
+     * @date Created on 2016/7/15 0015 21:40
+     */
     @GET("themes")
-    Observable<String> themes();
+    Observable<ThemeEntity> themes();
 
     /**
      * 根据主题id获得该主题日报列表

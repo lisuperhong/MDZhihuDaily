@@ -24,12 +24,13 @@
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_marginBottom="16dp"
+        android:padding="16dp"
         android:alpha="0.8"
         android:gravity="top"
         android:lines="2"
-        android:padding="16dp"
         android:textColor="#ffffff"
-        android:textSize="18sp"/>
+        android:textSize="22sp"/>
 </FrameLayout>

@@ -27,7 +27,7 @@ public class News implements Serializable {
         public long id;
         public String ga_prefix;
         public String title;
-        public String topDate;
+        public String storyDate;
 
         public long getId() {
             return id;
@@ -41,13 +41,12 @@ public class News implements Serializable {
             return title;
         }
 
-
-        public String getTopDate() {
-            return topDate;
+        public String getStoryDate() {
+            return storyDate;
         }
 
-        public void setTopDate(String topDate) {
-            this.topDate = topDate;
+        public void setStoryDate(String storyDate) {
+            this.storyDate = storyDate;
         }
 
         @Override
@@ -106,10 +105,14 @@ public class News implements Serializable {
         return topStories;
     }
 
+    public void setStories(List<Story> stories) {
+        this.stories = stories;
+    }
+
     @Override
     public String toString() {
         return "News{" +
-                "date='" + date + '\'' +
+                "storyDate='" + date + '\'' +
                 ", stories=" + stories +
                 ", topStories=" + topStories +
                 '}';

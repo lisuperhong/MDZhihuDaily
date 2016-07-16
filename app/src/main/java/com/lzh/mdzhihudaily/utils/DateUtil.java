@@ -12,53 +12,51 @@ import java.util.Date;
  */
 public class DateUtil {
 
-    private static final ThreadLocal<SimpleDateFormat> threadLocal = new ThreadLocal<>();
-
-    private static final Object object = new Object();
-
-    private static SimpleDateFormat getDateFormat(String format) throws RuntimeException {
-        SimpleDateFormat dateFormat = threadLocal.get();
-        if (dateFormat == null) {
-            synchronized (object) {
-                if (dateFormat == null) {
-                    dateFormat = new SimpleDateFormat(format);
-                    dateFormat.setLenient(false);
-                    threadLocal.set(dateFormat);
-                }
-            }
-        }
-        dateFormat.applyPattern(format);
-        return dateFormat;
-    }
+    public static final String FORMAT_YMD = "yyyyMMdd";
+    public static final String FORMAT_MM_DD = "M月d日";
 
     public static Date getCurrentDate() {
         Date date = Calendar.getInstance().getTime();
         return date;
     }
 
-    public static String dateToString(String format, Date date) {
+    public static String getStringDate(String format, String stringDate) {
         String result = "";
-        if (date != null) {
-            result = getDateFormat(format).format(date);
+        if (stringDate != null) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+            Date date = stringToDate(FORMAT_YMD, stringDate);
+            result = simpleDateFormat.format(date);
         }
         return result;
     }
 
     public static Date stringToDate(String format, String dateString) {
         Date date = null;
-        try {
-            date = getDateFormat(format).parse(dateString);
-        } catch (ParseException e) {
-            Logger.e(e, "格式异常");
+        if (dateString != null) {
+            try {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+                date = simpleDateFormat.parse(dateString);
+            } catch (ParseException e) {
+                Logger.d(e);
+            }
         }
         return date;
     }
 
-    public static String getDateWeek(Date date) {
+    public static String dateToString(String format, Date date) {
         String result = "";
         if (date != null) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+            result = simpleDateFormat.format(date);
+        }
+        return result;
+    }
+
+    public static String getDateWeek(String dateString) {
+        String result = "";
+        if (dateString != null) {
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
+            calendar.setTime(stringToDate(FORMAT_YMD, dateString));
             int week = calendar.get(Calendar.DAY_OF_WEEK);
             switch (week) {
                 case 1:
@@ -86,14 +84,5 @@ public class DateUtil {
         }
         return result;
     }
-
-    public static String getPreviousDate(String format, String dateString) {
-        Date date = stringToDate(format, dateString);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
-        return dateToString(format, calendar.getTime());
-    }
-
 
 }

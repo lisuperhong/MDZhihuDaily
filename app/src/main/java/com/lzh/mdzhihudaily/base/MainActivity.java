@@ -15,12 +15,10 @@ import android.view.MenuItem;
 import com.lzh.mdzhihudaily.R;
 import com.lzh.mdzhihudaily.module.newsList.NewsListFragment;
 import com.lzh.mdzhihudaily.module.themeDaily.ThemeDailyFragment;
-import com.lzh.mdzhihudaily.module.themeDaily.model.Theme;
+import com.lzh.mdzhihudaily.module.themeDaily.model.ThemeEntity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observer;
-import rx.functions.Func0;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawer;
 
     private String currentIndex;
-    private Theme theme;
+    private ThemeEntity.Theme theme;
     private FragmentManager fragmentManager;
     private NavigationFragment navigationFragment;
     private NewsListFragment newsListFragment;
@@ -71,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private void setListener() {
         navigationFragment.setOnMenuItemSelectedListener(new NavigationFragment.OnMenuItemSelectedListener() {
             @Override
-            public void menuItemSelected(int position, Theme themeItem) {
+            public void menuItemSelected(int position, ThemeEntity.Theme themeItem) {
                 theme = themeItem;
                 if (position == 0) {
                     setCurrentFramgent(NEWS_FRAGMENT);
@@ -105,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             switch (index) {
                 case NEWS_FRAGMENT:
-                    toolbar.setTitle(theme.getName());
+                    toolbar.setTitle("首页");
                     newsListFragment = new NewsListFragment();
                     transaction.replace(R.id.content_container, newsListFragment, NEWS_FRAGMENT);
                     break;
