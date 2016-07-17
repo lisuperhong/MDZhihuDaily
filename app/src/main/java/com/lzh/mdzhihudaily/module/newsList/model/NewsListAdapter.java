@@ -12,6 +12,7 @@ import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.lzh.mdzhihudaily.R;
+import com.lzh.mdzhihudaily.appinterface.RecyclerviewItemListener;
 import com.lzh.mdzhihudaily.view.CustomTextSliderView;
 import com.squareup.picasso.Picasso;
 
@@ -35,6 +36,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context context;
     private List<News.Story> stories;
     private List<News.TopStory> topStories;
+    private RecyclerviewItemListener itemClickListener;
 
     public NewsListAdapter(Context context, List<News.Story> stories, List<News.TopStory> topStories) {
         this.context = context;
@@ -71,12 +73,24 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         .setScaleType(BaseSliderView.ScaleType.CenterCrop)
                         .image(topStory.getImage());
                 viewHolder.sliderLayout.addSlider(textSliderView);
+                textSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+                    @Override
+                    public void onSliderClick(BaseSliderView slider) {
+                        itemClickListener.onItemClick(topStory.getId());
+                    }
+                });
             }
         } else if (holder instanceof DateViewHolder) {
             DateViewHolder viewHolder = (DateViewHolder) holder;
             bindItemView(viewHolder, position);
-            News.Story story = stories.get(position - (topStories == null || topStories.isEmpty() ? 0 : 1));
+            final News.Story story = stories.get(position - (topStories == null || topStories.isEmpty() ? 0 : 1));
             viewHolder.newsDate.setText(story.getStoryDate());
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.onItemClick(story.getId());
+                }
+            });
         } else if (holder instanceof ItemViewHolder) {
             ItemViewHolder viewHolder = (ItemViewHolder) holder;
             bindItemView(viewHolder, position);
@@ -84,12 +98,18 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private void bindItemView(ItemViewHolder viewHolder, int position) {
-        News.Story story = stories.get(position - (topStories == null || topStories.isEmpty() ? 0 : 1));
+        final News.Story story = stories.get(position - (topStories == null || topStories.isEmpty() ? 0 : 1));
         viewHolder.newsTitle.setText(story.getTitle());
         Picasso.with(context)
                 .load(story.getImages().get(0))
                 .placeholder(R.mipmap.account_avatar)
                 .into(viewHolder.newsImage);
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemClickListener.onItemClick(story.getId());
+            }
+        });
     }
 
     @Override
@@ -120,6 +140,10 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             stories.add(story);
         }
         notifyDataSetChanged();
+    }
+
+    public void setItemClickListener(RecyclerviewItemListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
     }
 
     public List<News.Story> getStories() {

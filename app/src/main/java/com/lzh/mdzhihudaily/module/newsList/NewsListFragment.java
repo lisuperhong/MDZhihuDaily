@@ -14,8 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.lzh.mdzhihudaily.R;
+import com.lzh.mdzhihudaily.appinterface.RecyclerviewItemListener;
 import com.lzh.mdzhihudaily.base.BaseFragment;
 import com.lzh.mdzhihudaily.base.MainActivity;
+import com.lzh.mdzhihudaily.module.newsDetail.NewsDetailActivity;
 import com.lzh.mdzhihudaily.module.newsList.model.News;
 import com.lzh.mdzhihudaily.module.newsList.model.NewsListAdapter;
 import com.lzh.mdzhihudaily.net.HttpMethod;
@@ -41,7 +43,7 @@ import rx.schedulers.Schedulers;
  * @date Created on 2016/7/13 0013 21:49
  * github: https://github.com/lisuperhong
  */
-public class NewsListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class NewsListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, RecyclerviewItemListener {
 
     @Bind(R.id.recyclerview)
     RecyclerView recyclerview;
@@ -74,7 +76,10 @@ public class NewsListFragment extends BaseFragment implements SwipeRefreshLayout
     private void initData() {
         currentDate = DateUtil.dateToString(DateUtil.FORMAT_YMD, DateUtil.getCurrentDate());
         beforeDate = currentDate;
-        Logger.d("initdata " + beforeDate);
+        adapter = new NewsListAdapter(getActivity(), new ArrayList<News.Story>(), new ArrayList<News.TopStory>());
+        adapter.setItemClickListener(this);
+        recyclerview.setAdapter(adapter);
+
         unsubscribe();
         subscription = HttpMethod.getInstance().dailyAPI()
                 .newsLatest()
@@ -95,8 +100,7 @@ public class NewsListFragment extends BaseFragment implements SwipeRefreshLayout
 
                     @Override
                     public void onNext(News news) {
-                        adapter = new NewsListAdapter(getActivity(), news.getStories(), news.getTopStories());
-                        recyclerview.setAdapter(adapter);
+                        adapter.setRefreshDate(news.getStories(), news.getTopStories());
                     }
                 });
     }
@@ -229,6 +233,11 @@ public class NewsListFragment extends BaseFragment implements SwipeRefreshLayout
             return news;
         }
     };
+
+    @Override
+    public void onItemClick(long storyId) {
+        NewsDetailActivity.startActivity(getActivity(), storyId);
+    }
 
     @Override
     public void onDestroyView() {

@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.lzh.mdzhihudaily.R;
+import com.lzh.mdzhihudaily.appinterface.RecyclerviewItemListener;
 import com.lzh.mdzhihudaily.base.BaseFragment;
+import com.lzh.mdzhihudaily.module.newsDetail.NewsDetailActivity;
 import com.lzh.mdzhihudaily.module.themeDaily.model.ThemeDailyListAdapter;
 import com.lzh.mdzhihudaily.module.themeDaily.model.ThemeNews;
 import com.lzh.mdzhihudaily.net.HttpMethod;
@@ -31,10 +33,10 @@ import rx.schedulers.Schedulers;
  * @date Created on 2016/7/11 0011 22:24
  * github: https://github.com/lisuperhong
  */
-public class ThemeDailyFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class ThemeDailyFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, RecyclerviewItemListener {
 
-    public static final String KEY_THEME = "key_theme";
-    public static final String THEME_ID = "theme_id";
+    private static final String KEY_THEME = "key_theme";
+    private static final String THEME_ID = "theme_id";
 
     @Bind(R.id.recyclerview)
     RecyclerView recyclerview;
@@ -44,6 +46,7 @@ public class ThemeDailyFragment extends BaseFragment implements SwipeRefreshLayo
     ProgressBar progressBar;
 
     private ThemeDailyListAdapter adapter;
+    private ThemeNews themeNews;
     private int themeId;
 
     public static ThemeDailyFragment newInstance(String theme, int id) {
@@ -80,8 +83,9 @@ public class ThemeDailyFragment extends BaseFragment implements SwipeRefreshLayo
     }
 
     private void initData() {
-
         themeId = (int) getArguments().get(THEME_ID);
+        adapter = new ThemeDailyListAdapter(getActivity(), new ThemeNews());
+        adapter.setItemClickListener(this);
         unsubscribe();
         subscription = HttpMethod.getInstance().dailyAPI()
                 .themeNews(themeId)
@@ -106,7 +110,7 @@ public class ThemeDailyFragment extends BaseFragment implements SwipeRefreshLayo
 
                     @Override
                     public void onNext(ThemeNews themeNews) {
-                        adapter = new ThemeDailyListAdapter(getActivity(), themeNews);
+                        adapter.setThemeNews(themeNews);
                         recyclerview.setAdapter(adapter);
                     }
                 });
@@ -136,6 +140,11 @@ public class ThemeDailyFragment extends BaseFragment implements SwipeRefreshLayo
                         adapter.setThemeNews(themeNews);
                     }
                 });
+    }
+
+    @Override
+    public void onItemClick(long storyId) {
+        NewsDetailActivity.startActivity(getActivity(), storyId);
     }
 
     @Override

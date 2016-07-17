@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lzh.mdzhihudaily.R;
+import com.lzh.mdzhihudaily.appinterface.RecyclerviewItemListener;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
@@ -28,6 +29,7 @@ public class ThemeDailyListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private Context context;
     private ThemeNews themeNews;
+    private RecyclerviewItemListener itemClickListener;
 
     public ThemeDailyListAdapter(Context context, ThemeNews themeNews) {
         this.context = context;
@@ -66,7 +68,7 @@ public class ThemeDailyListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
         } else if (holder instanceof ItemViewHolder) {
             ItemViewHolder viewHolder = (ItemViewHolder) holder;
-            ThemeNews.Story story = themeNews.getStories().get(position - 2);
+            final ThemeNews.Story story = themeNews.getStories().get(position - 2);
             viewHolder.newsTitle.setText(story.getTitle());
             if (story.getImages() != null) {
                 viewHolder.newsImage.setVisibility(View.VISIBLE);
@@ -77,6 +79,12 @@ public class ThemeDailyListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             } else {
                 viewHolder.newsImage.setVisibility(View.GONE);
             }
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.onItemClick(story.getId());
+                }
+            });
         }
     }
 
@@ -99,6 +107,10 @@ public class ThemeDailyListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void setThemeNews(ThemeNews themeNews) {
         this.themeNews = themeNews;
         notifyDataSetChanged();
+    }
+
+    public void setItemClickListener(RecyclerviewItemListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
