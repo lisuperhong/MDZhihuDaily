@@ -14,4 +14,12 @@ public class StartImage implements Serializable {
 
     private String text;
     private String img;
+
+    public String getText() {
+        return text;
+    }
+
+    public String getImg() {
+        return img;
+    }
 }

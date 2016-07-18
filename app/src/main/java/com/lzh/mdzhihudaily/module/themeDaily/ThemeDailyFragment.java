@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import com.lzh.mdzhihudaily.R;
 import com.lzh.mdzhihudaily.appinterface.RecyclerviewItemListener;
 import com.lzh.mdzhihudaily.base.BaseFragment;
-import com.lzh.mdzhihudaily.module.newsDetail.NewsDetailActivity;
+import com.lzh.mdzhihudaily.module.newsDetail.ThemeNewsDetailActivity;
 import com.lzh.mdzhihudaily.module.themeDaily.model.ThemeDailyListAdapter;
 import com.lzh.mdzhihudaily.module.themeDaily.model.ThemeNews;
 import com.lzh.mdzhihudaily.net.HttpMethod;
@@ -46,7 +46,6 @@ public class ThemeDailyFragment extends BaseFragment implements SwipeRefreshLayo
     ProgressBar progressBar;
 
     private ThemeDailyListAdapter adapter;
-    private ThemeNews themeNews;
     private int themeId;
 
     public static ThemeDailyFragment newInstance(String theme, int id) {
@@ -144,7 +143,7 @@ public class ThemeDailyFragment extends BaseFragment implements SwipeRefreshLayo
 
     @Override
     public void onItemClick(long storyId) {
-        NewsDetailActivity.startActivity(getActivity(), storyId);
+        ThemeNewsDetailActivity.startActivity(getActivity(), storyId);
     }
 
     @Override

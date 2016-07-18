@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">知乎小报</string>
+    <string name="app_name">知乎日报</string>
     <string name="title_activity_main">首页</string>
+    <string name="toolbar_title">知乎日报</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -10,19 +11,4 @@
     <string name="action_settings">设置选项</string>
     <string name="action_add_theme">添加主题</string>
 
-    <string-array name="navigation_menu">
-        <item>首页</item>
-        <item>日常心理学</item>
-        <item>用户推荐日报</item>
-        <item>电影日报</item>
-        <item>不许无聊</item>
-        <item>设计日报</item>
-        <item>大公司日报</item>
-        <item>财经日报</item>
-        <item>互联网安全</item>
-        <item>开始游戏</item>
-        <item>音乐日报</item>
-        <item>动漫日报</item>
-        <item>体育日报</item>
-    </string-array>
 </resources>
