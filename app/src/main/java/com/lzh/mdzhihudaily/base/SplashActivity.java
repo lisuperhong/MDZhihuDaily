@@ -42,6 +42,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
+
+        initData();
     }
 
     private void initData() {
@@ -87,7 +89,7 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         };
-        timer.schedule(timerTask, 1000 * 3);
+        timer.schedule(timerTask, 1000 * 2);
     }
 
 }
