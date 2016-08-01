@@ -82,24 +82,19 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         } else if (holder instanceof DateViewHolder) {
             DateViewHolder viewHolder = (DateViewHolder) holder;
-            bindItemView(viewHolder, position);
-            final News.Story story = stories.get(position - (topStories == null || topStories.isEmpty() ? 0 : 1));
-            viewHolder.newsDate.setText(story.getStoryDate());
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    itemClickListener.onItemClick(story.getId());
-                }
-            });
+            bindItemView(viewHolder, position, true);
         } else if (holder instanceof ItemViewHolder) {
             ItemViewHolder viewHolder = (ItemViewHolder) holder;
-            bindItemView(viewHolder, position);
+            bindItemView(viewHolder, position, false);
         }
     }
 
-    private void bindItemView(ItemViewHolder viewHolder, int position) {
+    private void bindItemView(ItemViewHolder viewHolder, int position, boolean isDateView) {
         final News.Story story = stories.get(position - (topStories == null || topStories.isEmpty() ? 0 : 1));
         viewHolder.newsTitle.setText(story.getTitle());
+        if (isDateView) {
+            viewHolder.newsDate.setText(story.getStoryDate());
+        }
         Picasso.with(context)
                 .load(story.getImages().get(0))
                 .placeholder(R.mipmap.account_avatar)
