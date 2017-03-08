@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_notification"
+        android:icon="@drawable/message"
+        android:orderInCategory="100"
+        android:title="@string/action_notification"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_add"
+        android:icon="@drawable/theme_add"
+        android:orderInCategory="100"
+        android:title="@string/action_add_theme"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_dark_mode"
+        android:orderInCategory="100"
+        android:title="@string/action_dark_mode"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+</menu>

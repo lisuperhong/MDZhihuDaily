@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ThemeEntity -->
+    <color name="colorPrimary">#00A2ED</color>
+    <color name="colorPrimaryDark">#1976D2</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <!--Base Color -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!-- Navigation menu -->
+    <color name="menu_main">#0EA7EC</color>
+    <color name="menu_selected">#F0F0F0</color>
+</resources>

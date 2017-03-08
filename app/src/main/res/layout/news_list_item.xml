@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="12dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="2dp"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/news_image"
+            android:layout_width="80dp"
+            android:layout_height="70dp"
+            android:layout_alignParentRight="true"
+            android:scaleType="centerCrop"
+            tools:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/news_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/news_image"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:padding="3dp"
+            android:layout_marginBottom="24dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            tools:text="新闻标题新闻标题新闻标题新闻标题新闻标题新闻标题" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
