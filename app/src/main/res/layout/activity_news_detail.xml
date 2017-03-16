@@ -54,8 +54,8 @@
                     android:alpha="0.8"
                     android:gravity="top"
                     android:lines="2"
-                    android:textColor="#ffffff"
-                    android:textSize="20sp"/>
+                    android:textColor="@color/white"
+                    android:textSize="22sp"/>
             </FrameLayout>
 
             <android.support.v7.widget.Toolbar

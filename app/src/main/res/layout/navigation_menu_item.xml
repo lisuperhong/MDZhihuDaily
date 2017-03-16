@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:paddingRight="12dp"
         android:layout_centerVertical="true"
-        android:src="@mipmap/menu_home"
+        android:src="@drawable/menu_home"
         android:visibility="gone"/>
 
     <TextView
@@ -33,5 +33,5 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:paddingLeft="18dp"
-        android:src="@mipmap/menu_arrow"/>
+        android:src="@drawable/menu_arrow"/>
 </RelativeLayout>

@@ -14,10 +14,10 @@
         android:textSize="16sp"
         android:text="主编"/>
 
-    <com.lzh.mdzhihudaily.view.CircleImageView
+    <com.lzh.mdzhihudaily_mvp.widget.CircleImageView
         android:id="@+id/editor_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:src="@mipmap/comment_avatar"/>
+        android:src="@drawable/comment_avatar"/>
 </LinearLayout>
