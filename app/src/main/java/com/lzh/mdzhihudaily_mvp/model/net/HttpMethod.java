@@ -48,13 +48,12 @@ public class HttpMethod {
     private OkHttpClient setOkHttpClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+        return new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
                 .build();
-        return okHttpClient;
     }
 
     /**
