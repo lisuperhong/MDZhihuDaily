@@ -3,7 +3,10 @@ package com.lzh.mdzhihudaily_mvp.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+<<<<<<< HEAD
 import android.util.Log;
+=======
+>>>>>>> 21f335550fbbbc038b9f5be71b4090f37bac2b67
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +29,10 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+<<<<<<< HEAD
         Log.d("BaseFragment", getClass().getSimpleName());
+=======
+>>>>>>> 21f335550fbbbc038b9f5be71b4090f37bac2b67
         View view = inflater.inflate(getLayoutId(), container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
