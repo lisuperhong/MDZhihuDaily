@@ -3,10 +3,7 @@ package com.lzh.mdzhihudaily_mvp.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-<<<<<<< HEAD
 import android.util.Log;
-=======
->>>>>>> 21f335550fbbbc038b9f5be71b4090f37bac2b67
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -27,11 +24,8 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
-<<<<<<< HEAD
         Log.d("BaseActivity", getClass().getSimpleName());
         ActivityCollector.addActivity(this);
-=======
->>>>>>> 21f335550fbbbc038b9f5be71b4090f37bac2b67
         unbinder = ButterKnife.bind(this);
         initView();
     }
@@ -45,10 +39,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     @Override
     protected void onDestroy() {
         super.onDestroy();
-<<<<<<< HEAD
         ActivityCollector.removeActivity(this);
-=======
->>>>>>> 21f335550fbbbc038b9f5be71b4090f37bac2b67
         unbinder.unbind();
         if (presenter != null) {
             presenter.unsubscript();
